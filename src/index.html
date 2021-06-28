@@ -5,9 +5,22 @@
 <body>
   <div class="container">
     <h1>Get Weather Conditions From Anywhere!</h1>
-    <label for="location">Enter a location:</label>
-    <input id="location" type="text">
-    <button class="btn-success" id="weatherLocation">Get Current Weather Details</button>
+    <label for="location">
+      <form id="location-form" class="form-group">
+        <div class="form-group">
+          <label for="location-form">Choose Location Method</label>
+            <select id="weather-parameter" class="form-control">
+              <option value="q">City Name</option>
+              <option value="id">City ID</option>
+              <option value="lat-lon">City Coordinates</option>
+              <option value="zip">ZIP code</option>
+            </select>
+        </div>
+        <br>
+        <input id="location" type="text">
+        <button type="submit" class="btn-success" id="weatherLocation">Get Current Weather Details</button>
+      </form>
+    </label>
     <div class="showErrors"></div>
     <div class="showHumidity"></div>
     <div class="showTemp"></div>
