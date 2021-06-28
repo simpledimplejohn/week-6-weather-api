@@ -24,6 +24,8 @@ $(document).ready(function() {
     function getElements(response) {
       $('.showHumidity').text(`The humidity in ${city} is ${response.main.humidity}%`);
       $('.showTemp').text(`The temperature in Kelvins is ${response.main.temp} degrees.`);
+      $('.showPressure').text(`The pressure is ${response.main.pressure} inHg²`);
+      $('.showClouds').text(`The cloud coverage is: ${response.weather[0].description}`);
     }
   });
 });
