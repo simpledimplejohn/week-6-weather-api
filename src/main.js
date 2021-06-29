@@ -13,28 +13,28 @@ $(document).ready(function() {
   
     let choice = $('#location').val();
     console.log(choice);
-
-    function result() {
-      if (inputtedParameter === "lat-lon") {
-        return `http://api.openweathermap.org/data/2.5/weather?${inputtedParameter}=${choice}&appid=${process.env.API_KEY}`;
-      } else if (inputtedParameter === "id") {
-        return `http://api.openweathermap.org/data/2.5/weather?${inputtedParameter}=${choice}&appid=${process.env.API_KEY}`;
-        
-      } else if (inputtedParameter === "q") {
-        return`http://api.openweathermap.org/data/2.5/weather?${inputtedParameter}=${choice}&appid=${process.env.API_KEY}`;
-    
-      } else if (inputtedParameter === "zip") {
-        return `http://api.openweathermap.org/data/2.5/weather?${inputtedParameter}=${choice}&appid=${process.env.API_KEY}`;
-        
-      } else {
-        return "Try again!";
-      }
+    let url;
+    if (inputtedParameter === "lat-lon") {
+      let coords = choice.split(", "); 
+      let lat = coords[0]; 
+      let lon = coords[1];
+      console.log("lat-lon", lat, lon)
+      url = `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${process.env.API_KEY}`;
+    } else if (inputtedParameter === "id") {
+      url = `http://api.openweathermap.org/data/2.5/weather?${inputtedParameter}=${choice}&appid=${process.env.API_KEY}`;
+      
+    } else if (inputtedParameter === "q") {
+      url =  `http://api.openweathermap.org/data/2.5/weather?${inputtedParameter}=${choice}&appid=${process.env.API_KEY}`;
   
-    }
-    console.log(result());
-    let promise = new Promise(function(resolve, reject) {
+    } else if (inputtedParameter === "zip") {
+      url = `http://api.openweathermap.org/data/2.5/weather?${inputtedParameter}=${choice}&appid=${process.env.API_KEY}`;
+      
+    } else {
+      url = `http://api.openweathermap.org/data/2.5/weather?${inputtedParameter}=&appid=${process.env.API_KEY}`;
+    }      
+    let promise2 = new Promise(function(resolve, reject) {
       let request = new XMLHttpRequest();
-      const url = result();
+      //const url = resultSubmit();
       request.onload = function() {
         if (this.status === 200) {
           resolve(request.response);
@@ -45,12 +45,14 @@ $(document).ready(function() {
       request.open("GET", url, true);
       request.send();
     });  
-    promise.then(function(response) {
+    promise2.then(function(response) {
       const body = JSON.parse(response);
+      console.log(body);
       $('.showHumidity').text(`The humidity is ${body.main.humidity}%`);
       $('.showTemp').text(`The temperature in Kelvins is ${body.main.temp} degrees.`);
       $('.showPressure').text(`The pressure is ${body.main.pressure} inHg²`);
       $('.showClouds').text(`The cloud coverage is: ${body.weather[0].description}`)
+      $('.coordinates').text(`The coordinate location is ${body.coord.lat}, ${body.coord.lon} `)
       $('.showErrors').text("");
     }, function(error) {
       $('.showErrors').text(`There was an error processing your request: ${error}`);
@@ -58,6 +60,7 @@ $(document).ready(function() {
       $('.showTemp').text("");
       $('.showPressure').text("");
       $('.showClouds').text("");
+      $('.coordinates').text("");
     });
   });
 });
@@ -81,4 +84,6 @@ $(document).ready(function() {
 //   $('.showPressure').text(`The pressure is ${response.main.pressure} inHg²`);
 //   $('.showClouds').text(`The cloud coverage is: ${response.weather[0].description}`);
 // }
+
+//http://api.openweathermap.org/geo/1.0/reverse?lat={lat}&lon={lon}&limit={limit}&appid={API key};
 /* eslint-enable no-debugger */
